@@ -17,10 +17,10 @@ void AMainCharacter::BeginPlay()
 	if (AbilitySystemComponent)
 	{
 		AttributeSet = AbilitySystemComponent->GetSet<UMagicSystemAttributeSet>();
-		const_cast<UMagicSystemAttributeSet*>(AttributeSet)->HealthChangeDelegate.AddDynamic(this, AMainCharacter::OnHealthChangedNative);
-		const_cast<UMagicSystemAttributeSet*>(AttributeSet)->ManaChangeDelegate.AddDynamic(this, AMainCharacter::OnManaChangedNative);
-		const_cast<UMagicSystemAttributeSet*>(AttributeSet)->AttackDamageChangeDelegate.AddDynamic(this, AMainCharacter::OnAttackDamageChangedNative);
-		const_cast<UMagicSystemAttributeSet*>(AttributeSet)->SpeedMultiplierChangeDelegate.AddDynamic(this, AMainCharacter::OnSpeedMultiplierChangedNative);
+		const_cast<UMagicSystemAttributeSet*>(AttributeSet)->HealthChangeDelegate.AddDynamic(this, &AMainCharacter::OnHealthChangedNative);
+		const_cast<UMagicSystemAttributeSet*>(AttributeSet)->ManaChangeDelegate.AddDynamic(this, &AMainCharacter::OnManaChangedNative);
+		const_cast<UMagicSystemAttributeSet*>(AttributeSet)->AttackDamageChangeDelegate.AddDynamic(this, &AMainCharacter::OnAttackDamageChangedNative);
+		const_cast<UMagicSystemAttributeSet*>(AttributeSet)->SpeedMultiplierChangeDelegate.AddDynamic(this, &AMainCharacter::OnSpeedMultiplierChangedNative);
 	}
 }
 
@@ -63,7 +63,7 @@ void AMainCharacter::OnSpeedMultiplierChangedNative(float speedMultiplier, int32
 
 void AMainCharacter::InitializeAbility(TSubclassOf<UGameplayAbility> abilityToGet, int32 abilityLevel)
 {
-	if (HasAuthority && AbilitySystemComponent)
+	if (HasAuthority() && AbilitySystemComponent)
 	{
 		AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(abilityToGet, abilityLevel, 0));
 	}
