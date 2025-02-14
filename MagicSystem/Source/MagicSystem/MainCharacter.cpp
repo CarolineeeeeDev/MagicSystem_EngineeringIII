@@ -119,8 +119,8 @@ void AMainCharacter::GetCurrentHealthValues(float& currentHealth, float& MaxHeal
 {
 	if (AttributeSet)
 	{
-		currentHealth = AttributeSet->GetCurrentHealth();
-		MaxHealth = AttributeSet->GetMaxHealth();
+		currentHealth = AttributeSet->GetcurrentHealth();
+		MaxHealth = AttributeSet->GetmaxHealth();
 	}
 }
 
@@ -128,8 +128,8 @@ void AMainCharacter::GetCurrentManaValues(float& currentMana, float& MaxMana)
 {
 	if (AttributeSet)
 	{
-		currentMana = AttributeSet->GetCurrentMana();
-		MaxMana = AttributeSet->GetMaxMana();
+		currentMana = AttributeSet->GetcurrentMana();
+		MaxMana = AttributeSet->GetmaxMana();
 	}
 }
 
@@ -137,7 +137,7 @@ void AMainCharacter::GetCurrentAttackDamageValues(float& currentAttackDamage)
 {
 	if (AttributeSet)
 	{
-		currentAttackDamage = AttributeSet->GetAttackDamage();
+		currentAttackDamage = AttributeSet->GetattackDamage();
 	}
 }
 
@@ -145,7 +145,7 @@ void AMainCharacter::GetCurrentSpeedMultiplierValues(float& currentSpeedMultipli
 {
 	if (AttributeSet)
 	{
-		currentSpeedMultiplier = AttributeSet->GetSpeedMultiplier();
+		currentSpeedMultiplier = AttributeSet->GetspeedMultiplier();
 	}
 }
 
