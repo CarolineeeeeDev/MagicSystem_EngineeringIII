@@ -21,7 +21,6 @@ void AMainCharacter::BeginPlay()
 		const_cast<UMagicSystemAttributeSet*>(AttributeSet)->ManaChangeDelegate.AddDynamic(this, AMainCharacter::OnManaChangedNative);
 		const_cast<UMagicSystemAttributeSet*>(AttributeSet)->AttackDamageChangeDelegate.AddDynamic(this, AMainCharacter::OnAttackDamageChangedNative);
 		const_cast<UMagicSystemAttributeSet*>(AttributeSet)->SpeedMultiplierChangeDelegate.AddDynamic(this, AMainCharacter::OnSpeedMultiplierChangedNative);
-		
 	}
 }
 
@@ -62,3 +61,102 @@ void AMainCharacter::OnSpeedMultiplierChangedNative(float speedMultiplier, int32
 	OnSpeedMultiplierChanged(speedMultiplier, staticCounut);
 }
 
+void AMainCharacter::InitializeAbility(TSubclassOf<UGameplayAbility> abilityToGet, int32 abilityLevel)
+{
+	if (HasAuthority && AbilitySystemComponent)
+	{
+		AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(abilityToGet, abilityLevel, 0));
+	}
+}
+
+void AMainCharacter::InitializeAbilities(TArray<TSubclassOf<UGameplayAbility>> abilitiesToGet, int32 abilityLevel)
+{
+	for (TSubclassOf<UGameplayAbility> Abilities : abilitiesToGet)
+	{
+		InitializeAbility(Abilities, abilityLevel);
+	}
+}
+
+void AMainCharacter::RemoveAbilityWithTags(FGameplayTagContainer tagContainer)
+{
+	TArray<FGameplayAbilitySpec*> localAbility;
+	AbilitySystemComponent->GetActivatableGameplayAbilitySpecsByAllMatchingTags(tagContainer, localAbility);
+	for (FGameplayAbilitySpec* Spec : localAbility)
+	{
+		AbilitySystemComponent->ClearAbility(Spec->Handle);
+	}
+}
+
+void AMainCharacter::ChangeAbilityLevelWithTags(FGameplayTagContainer tagContainer, int32 newAbilityLevel)
+{
+	TArray<FGameplayAbilitySpec*> localAbility;
+	AbilitySystemComponent->GetActivatableGameplayAbilitySpecsByAllMatchingTags(tagContainer, localAbility);
+	for (FGameplayAbilitySpec* Spec : localAbility)
+	{
+		Spec->Level = newAbilityLevel;
+	}
+}
+
+void AMainCharacter::CancelAbilityWithTags(FGameplayTagContainer withTags, FGameplayTagContainer withoutTags)
+{
+	AbilitySystemComponent->CancelAbilities(&withTags, &withoutTags, nullptr);
+}
+
+void AMainCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	InitializeAbilities(InitialAbilities, 0);
+}
+
+void AMainCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+}
+
+void AMainCharacter::GetCurrentHealthValues(float& currentHealth, float& MaxHealth)
+{
+	if (AttributeSet)
+	{
+		currentHealth = AttributeSet->GetCurrentHealth();
+		MaxHealth = AttributeSet->GetMaxHealth();
+	}
+}
+
+void AMainCharacter::GetCurrentManaValues(float& currentMana, float& MaxMana)
+{
+	if (AttributeSet)
+	{
+		currentMana = AttributeSet->GetCurrentMana();
+		MaxMana = AttributeSet->GetMaxMana();
+	}
+}
+
+void AMainCharacter::GetCurrentAttackDamageValues(float& currentAttackDamage)
+{
+	if (AttributeSet)
+	{
+		currentAttackDamage = AttributeSet->GetAttackDamage();
+	}
+}
+
+void AMainCharacter::GetCurrentSpeedMultiplierValues(float& currentSpeedMultiplier)
+{
+	if (AttributeSet)
+	{
+		currentSpeedMultiplier = AttributeSet->GetSpeedMultiplier();
+	}
+}
+
+void AMainCharacter::AddLoseGameplayTag(FGameplayTag tagToAdd)
+{
+	AbilitySystemComponent->AddLooseGameplayTag(tagToAdd);
+	AbilitySystemComponent->SetTagMapCount(tagToAdd, 1);
+}
+
+void AMainCharacter::RemoveLoseGameplayTag(FGameplayTag tagToRemove)
+{
+	AbilitySystemComponent->RemoveLooseGameplayTag(tagToRemove);
+
+}

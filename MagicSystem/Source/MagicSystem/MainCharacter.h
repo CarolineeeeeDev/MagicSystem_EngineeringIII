@@ -56,17 +56,16 @@ public:
 
 
 	UFUNCTION(BlueprintCallable, Category = "GAS")
-	void InitializeAbility(TSubclassOf<UGameplayAbility> AbilityToGet, int32 AbilityLevel);
-	
+	void InitializeAbility(TSubclassOf<UGameplayAbility> abilityToGet, int32 abilityLevel);
 	UFUNCTION(BlueprintCallable, Category = "GAS")
-	void InitializeAbilities(TArray<TSubclassOf<UGameplayAbility>> AbilitiesToGet, int32 AbilityLevel);
+	void InitializeAbilities(TArray<TSubclassOf<UGameplayAbility>> abilitiesToGet, int32 abilityLevel);
 
 	UFUNCTION(BlueprintCallable, Category = "GAS")
 	void RemoveAbilityWithTags(FGameplayTagContainer tagContainer);
 	UFUNCTION(BlueprintCallable, Category = "GAS")
 	void ChangeAbilityLevelWithTags(FGameplayTagContainer tagContainer, int32 newAbilityLevel);
 	UFUNCTION(BlueprintCallable, Category = "GAS")
-	void CancelAbilityWithTags(FGameplayTagContainer tagContainer);
+	void CancelAbilityWithTags(FGameplayTagContainer withTags, FGameplayTagContainer withoutTags);
 
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
