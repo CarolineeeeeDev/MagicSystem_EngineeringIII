@@ -24,7 +24,7 @@ void AMagicGameplayAbilityTargetActor::Tick(float DeltaSeconds)
 		}
 		else
 		{
-			DebugReticle->SetActorLocation(hitTraceResults.TraceEnd, false, nullptr, ETeleportType::None);
+			//DebugReticle->SetActorLocation(hitTraceResults.TraceEnd, false, nullptr, ETeleportType::None);
 		}
 	}
 }
@@ -39,7 +39,7 @@ AGameplayAbilityWorldReticle* AMagicGameplayAbilityTargetActor::SpawnReticleActo
 			if (spawnReticleActor)
 			{
 				spawnReticleActor->InitializeReticle(this, PrimaryPC, ReticleParams);
-				spawnReticleActor->SetReplicates(false);
+				//spawnReticleActor->SetReplicates(false);
 				return spawnReticleActor;
 			}
 		}
@@ -63,7 +63,16 @@ void AMagicGameplayAbilityTargetActor::StartTargeting(UGameplayAbility* ability)
 {
 	OwningAbility = ability;
 	PrimaryPC = Cast<APlayerController>(ability->GetOwningActorFromActorInfo()->GetInstigatorController());
-	DebugReticle = SpawnReticleActor(GetActorLocation(), GetActorRotation());
+
+	FHitResult hitResult;
+	if (LineTraceHit(hitResult))
+	{
+		DebugReticle = SpawnReticleActor(GetActorLocation(), GetActorRotation());
+	}
+	else
+	{
+		CancelTargeting();
+	}
 }
 
 void AMagicGameplayAbilityTargetActor::ConfirmTargetingAndContinue()
@@ -85,8 +94,11 @@ void AMagicGameplayAbilityTargetActor::ConfirmTargetingAndContinue()
 
 void AMagicGameplayAbilityTargetActor::CancelTargeting()
 {
-	Super::CancelTargeting();
-	DestoryReticleActors();
+	if (DebugReticle)
+	{
+		Super::CancelTargeting();
+		DestoryReticleActors();
+	}
 }
 
 bool AMagicGameplayAbilityTargetActor::LineTraceHit(FHitResult& hitResult)
