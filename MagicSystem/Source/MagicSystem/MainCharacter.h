@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
+#include "MagicSystemCharacter.h"
 #include "GameplayEffectTypes.h"
 #include "MainCharacter.generated.h"
 
