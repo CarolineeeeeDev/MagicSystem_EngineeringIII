@@ -187,45 +187,45 @@ void FAnimNode_VrmSpringBone::EvaluateComponentPose_AnyThread(FComponentSpacePos
 
 void FAnimNode_VrmSpringBone::EvaluateSkeletalControl_AnyThread(FComponentSpacePoseContext& Output, TArray<FBoneTransform>& OutBoneTransforms)
 {
-	check(OutBoneTransforms.Num() == 0);
+	//check(OutBoneTransforms.Num() == 0);
 
-	const auto RefSkeleton = Output.AnimInstanceProxy->GetSkeleton()->GetReferenceSkeleton();
-	const FTransform ComponentTransform = Output.AnimInstanceProxy->GetComponentTransform();
+	//const auto RefSkeleton = Output.AnimInstanceProxy->GetSkeleton()->GetReferenceSkeleton();
+	//const FTransform ComponentTransform = Output.AnimInstanceProxy->GetComponentTransform();
 
-	//dstRefSkeleton.GetParentIndex
+	////dstRefSkeleton.GetParentIndex
 
-	//auto BoneSpace = EBoneControlSpace::BCS_ParentBoneSpace;
-	auto BoneSpace = EBoneControlSpace::BCS_WorldSpace;
-	{
+	////auto BoneSpace = EBoneControlSpace::BCS_ParentBoneSpace;
+	//auto BoneSpace = EBoneControlSpace::BCS_WorldSpace;
+	//{
 
-		if (VrmMetaObject_Internal == nullptr) {
-			return;
-		}
-		if (VRMGetSkeleton(VrmMetaObject_Internal->SkeletalMesh) != Output.AnimInstanceProxy->GetSkeleton()) {
-			//skip for renamed bone
-			//return;
-		}
-		if (Output.Pose.GetPose().GetNumBones() <= 0) {
-			return;
-		}
+	//	if (VrmMetaObject_Internal == nullptr) {
+	//		return;
+	//	}
+	//	if (VRMGetSkeleton(VrmMetaObject_Internal->SkeletalMesh) != Output.AnimInstanceProxy->GetSkeleton()) {
+	//		//skip for renamed bone
+	//		//return;
+	//	}
+	//	if (Output.Pose.GetPose().GetNumBones() <= 0) {
+	//		return;
+	//	}
 
-		const auto &RefSkeletonTransform = Output.Pose.GetPose().GetBoneContainer().GetRefPoseArray();
+	//	const auto &RefSkeletonTransform = Output.Pose.GetPose().GetBoneContainer().GetRefPoseArray();
 
-		{
-			if (SpringManager.Get() == nullptr) {
-				return;
-			}
-			if (SpringManager->bInit == false) {
-				SpringManager->init(VrmMetaObject_Internal.Get(), Output);
-				return;
-			}
+	//	{
+	//		if (SpringManager.Get() == nullptr) {
+	//			return;
+	//		}
+	//		if (SpringManager->bInit == false) {
+	//			SpringManager->init(VrmMetaObject_Internal.Get(), Output);
+	//			return;
+	//		}
 
-			SpringManager->update(this, CurrentDeltaTime, Output, OutBoneTransforms);
+	//		SpringManager->update(this, CurrentDeltaTime, Output, OutBoneTransforms);
 
-			SpringManager->applyToComponent(Output, OutBoneTransforms);
+	//		SpringManager->applyToComponent(Output, OutBoneTransforms);
 
-		}
-	}
+	//	}
+	//}
 }
 
 bool FAnimNode_VrmSpringBone::IsValidToEvaluate(const USkeleton* Skeleton, const FBoneContainer& RequiredBones) 

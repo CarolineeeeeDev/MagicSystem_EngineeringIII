@@ -298,7 +298,7 @@ namespace VRMSpringBone {
 
 			s.stiffness = metaS.stiffness;
 			s.gravityPower = metaS.gravityPower;
-			s.gravityDir = meta->VrmAssetListObject->model_root_transform.TransformVector(metaS.gravityDir);
+			/*s.gravityDir = meta->VrmAssetListObject->model_root_transform.TransformVector(metaS.gravityDir);*/
 			s.dragForce = metaS.dragForce;
 			s.hitRadius = metaS.hitRadius;
 
